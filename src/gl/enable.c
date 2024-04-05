@@ -3,6 +3,7 @@
 #include "init.h"
 #include "loader.h"
 #include "debug.h"
+#include "vgpu/pack/load.h"
 
 //#define DEBUG
 #ifdef DEBUG
@@ -282,10 +283,10 @@ void gl4es_glEnable(GLenum cap) {
             cap = GL_TEXTURE_STREAM_IMG;
 	}
 #endif
-    LOAD_GLES(glEnable);
+    LOAD_GLES2_(glEnable);
     proxy_glEnable(cap, true, gles_glEnable);
 }
-void glEnable(GLenum cap) AliasExport("gl4es_glEnable");
+//void glEnable(GLenum cap) AliasExport("gl4es_glEnable");
 
 void gl4es_glDisable(GLenum cap) {
     DBG(printf("glDisable(%s), glstate->list.pending=%d\n", PrintEnum(cap), glstate->list.pending);)
@@ -303,10 +304,10 @@ void gl4es_glDisable(GLenum cap) {
             cap = GL_TEXTURE_STREAM_IMG;
 	}
 #endif
-    LOAD_GLES(glDisable);
+    LOAD_GLES2_(glDisable);
     proxy_glEnable(cap, false, gles_glDisable);
 }
-void glDisable(GLenum cap) AliasExport("gl4es_glDisable");
+//void glDisable(GLenum cap) AliasExport("gl4es_glDisable");
 
 void gl4es_glEnableClientState(GLenum cap) {
     DBG(printf("glEnableClientState(%s), list.begin=%dn", PrintEnum(cap), glstate->list.begin);)
@@ -341,7 +342,7 @@ GLboolean gl4es_glIsEnabled(GLenum cap) {
     // should flush for now... but no need if it's just a pending list...
     if (glstate->list.active && !glstate->list.pending)
         gl4es_flush();
-    LOAD_GLES(glIsEnabled);
+    LOAD_GLES2_(glIsEnabled);
     noerrorShim();
     switch (cap) {
         isenabled(GL_AUTO_NORMAL, auto_normal);
@@ -423,4 +424,4 @@ GLboolean gl4es_glIsEnabled(GLenum cap) {
 }
 #undef isenabled
 #undef clientisenabled
-GLboolean glIsEnabled(GLenum cap) AliasExport("gl4es_glIsEnabled");
+//GLboolean glIsEnabled(GLenum cap) AliasExport("gl4es_glIsEnabled");

@@ -15,6 +15,7 @@
 #include "matrix.h"
 #include "pixel.h"
 #include "raster.h"
+#include "vgpu/pack/load.h"
 
 //#define DEBUG
 #ifdef DEBUG
@@ -875,9 +876,9 @@ void gl4es_glTexImage2D(GLenum target, GLint level, GLint internalformat,
     // proxy case
     const GLuint itarget = what_target(target);
     const GLuint rtarget = map_tex_target(target);
-    LOAD_GLES(glTexImage2D);
-    LOAD_GLES(glTexSubImage2D);
-    LOAD_GLES(glTexParameteri);
+    LOAD_GLES2_(glTexImage2D);
+    LOAD_GLES2_(glTexSubImage2D);
+    LOAD_GLES2_(glTexParameteri);
 
     if(globals4es.force16bits) {
         if(internalformat==GL_RGBA || internalformat==4 || internalformat==GL_RGBA8)
@@ -1172,8 +1173,8 @@ void gl4es_glTexImage2D(GLenum target, GLint level, GLint internalformat,
                 bound->streamed = true;
                 ApplyFilterID(bound->streamingID, bound->min_filter, bound->mag_filter);
                 GLboolean tmp = IS_ANYTEX(glstate->enable.texture[glstate->texture.active]);
-                LOAD_GLES(glDisable);
-                LOAD_GLES(glEnable);
+                LOAD_GLES2_(glDisable);
+                LOAD_GLES2_(glEnable);
                 if (tmp)
                     gles_glDisable(GL_TEXTURE_2D);
                 ActivateStreaming(bound->streamingID);	//Activate the newly created texture
@@ -1532,8 +1533,8 @@ void gl4es_glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoff
     const GLuint itarget = what_target(target);
     const GLuint rtarget = map_tex_target(target);
 
-    LOAD_GLES(glTexSubImage2D);
-    LOAD_GLES(glTexParameteri);
+    LOAD_GLES2_(glTexSubImage2D);
+    LOAD_GLES2_(glTexParameteri);
     noerrorShim();
     DBG(printf("glTexSubImage2D on target=%s with unpack_row_length(%d), size(%d,%d), pos(%d,%d) and skip={%d,%d}, format=%s, type=%s, level=%d(base=%d, max=%d), mipmap={need=%d, auto=%d}, texture=%u\n", PrintEnum(target), glstate->texture.unpack_row_length, width, height, xoffset, yoffset, glstate->texture.unpack_skip_pixels, glstate->texture.unpack_skip_rows, PrintEnum(format), PrintEnum(type), level, glstate->texture.bound[glstate->texture.active][itarget]->base_level, glstate->texture.bound[glstate->texture.active][itarget]->max_level, glstate->texture.bound[glstate->texture.active][itarget]->mipmap_need, glstate->texture.bound[glstate->texture.active][itarget]->mipmap_auto, glstate->texture.bound[glstate->texture.active][itarget]->texture);)
     if (width==0 || height==0) {
@@ -1840,6 +1841,7 @@ void gl4es_glTexStorage2D(GLenum target, GLsizei levels, GLenum internalformat, 
 
 
 //Direct wrapper
+/*
 void glTexImage2D(GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data) AliasExport("gl4es_glTexImage2D");
 void glTexImage1D(GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, const GLvoid *data) AliasExport("gl4es_glTexImage1D");
 void glTexSubImage2D(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *data) AliasExport("gl4es_glTexSubImage2D");
@@ -1849,3 +1851,4 @@ GLboolean glIsTexture( GLuint texture ) AliasExport("gl4es_glIsTexture");
 // TexStorage
 void glTexStorage1D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width) AliasExport("gl4es_glTexStorage1D");
 void glTexStorage2D(GLenum target, GLsizei levels, GLenum internalformat, GLsizei width, GLsizei height) AliasExport("gl4es_glTexStorage2D");
+*/
