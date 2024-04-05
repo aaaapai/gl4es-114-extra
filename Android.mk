@@ -99,7 +99,7 @@ LOCAL_CFLAGS += -DNOX11
 LOCAL_CFLAGS += -DNO_GBM
 LOCAL_CFLAGS += -DDEFAULT_ES=3
 #LOCAL_CFLAGS += -DNO_INIT_CONSTRUCTOR
-#LOCAL_CFLAGS += -DDEFAULT_ES=2
+LOCAL_CFLAGS += -DDEFAULT_ES=2
 LOCAL_CFLAGS += -DANDROID -pipe -integrated-as -fno-plt -Ofast -flto -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce
 
 LOCAL_LDLIBS := -ldl -llog
