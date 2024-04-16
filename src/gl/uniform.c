@@ -5,6 +5,7 @@
 #include "glstate.h"
 #include "loader.h"
 #include "matvec.h"
+#include "vgpu/pack/load.h"
 
 //#define DEBUG
 #ifdef DEBUG
@@ -192,10 +193,10 @@ void GoUniformfv(program_t *glprogram, GLint location, int size, int count, cons
     }
     // update uniform
     memcpy(glprogram->cache.cache + m->cache_offs, value, rsize);
-    LOAD_GLES2(glUniform1fv);
-    LOAD_GLES2(glUniform2fv);
-    LOAD_GLES2(glUniform3fv);
-    LOAD_GLES2(glUniform4fv);
+    LOAD_GLES2_(glUniform1fv);
+    LOAD_GLES2_(glUniform2fv);
+    LOAD_GLES2_(glUniform3fv);
+    LOAD_GLES2_(glUniform4fv);
     if(gles_glUniform1fv) {
         switch (size) {
             case 1: gles_glUniform1fv(m->id, count, value); break;
@@ -240,10 +241,10 @@ void GoUniformiv(program_t *glprogram, GLint location, int size, int count, cons
     DBG(printf("Uniform updated, cache=%p(%d/%d), offset=%p, size=%d\n", glprogram->cache.cache, glprogram->cache.size, glprogram->cache.cap, m->cache_offs, rsize);)
     // update uniform
     memcpy(glprogram->cache.cache + m->cache_offs, value, rsize);
-    LOAD_GLES2(glUniform1iv);
-    LOAD_GLES2(glUniform2iv);
-    LOAD_GLES2(glUniform3iv);
-    LOAD_GLES2(glUniform4iv);
+    LOAD_GLES2_(glUniform1iv);
+    LOAD_GLES2_(glUniform2iv);
+    LOAD_GLES2_(glUniform3iv);
+    LOAD_GLES2_(glUniform4iv);
     if(gles_glUniform1iv) {
         switch (size) {
             case 1: gles_glUniform1iv(m->id, count, value); break;
@@ -562,7 +563,7 @@ void GoUniformMatrix2fv(program_t *glprogram, GLint location, GLsizei count, GLb
     }
     // update uniform
     memcpy(glprogram->cache.cache + m->cache_offs, v, rsize);
-    LOAD_GLES2(glUniformMatrix2fv);
+    LOAD_GLES2_(glUniformMatrix2fv);
     if (gles_glUniformMatrix2fv) {
         gles_glUniformMatrix2fv(m->id, count, GL_FALSE, v);
         errorGL();
@@ -628,7 +629,7 @@ void GoUniformMatrix3fv(program_t *glprogram, GLint location, GLsizei count, GLb
     }
     // update uniform
     memcpy(glprogram->cache.cache + m->cache_offs, v, rsize);
-    LOAD_GLES2(glUniformMatrix3fv);
+    LOAD_GLES2_(glUniformMatrix3fv);
     if (gles_glUniformMatrix3fv) {
         gles_glUniformMatrix3fv(m->id, count, GL_FALSE, v);
         errorGL();
@@ -690,7 +691,7 @@ void GoUniformMatrix4fv(program_t *glprogram, GLint location, GLsizei count, GLb
     }
     // update uniform
     memcpy(glprogram->cache.cache + m->cache_offs, v, rsize);
-    LOAD_GLES2(glUniformMatrix4fv);
+    LOAD_GLES2_(glUniformMatrix4fv);
     if (gles_glUniformMatrix4fv) {
         gles_glUniformMatrix4fv(m->id, count, GL_FALSE, v);
         errorGL();
@@ -740,6 +741,7 @@ const char* GetUniformName(program_t *glprogram, GLint location)
     return m->name;
 }
 
+/*
 void glGetUniformfv(GLuint program, GLint location, GLfloat *params) AliasExport("gl4es_glGetUniformfv");
 void glGetUniformiv(GLuint program, GLint location, GLint *params) AliasExport("gl4es_glGetUniformiv");
 void glUniform1f(GLint location, GLfloat v0) AliasExport("gl4es_glUniform1f");
@@ -761,6 +763,7 @@ void glUniform4iv(GLint location, GLsizei count, const GLint *value) AliasExport
 void glUniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) AliasExport("gl4es_glUniformMatrix2fv");
 void glUniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) AliasExport("gl4es_glUniformMatrix3fv");
 void glUniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) AliasExport("gl4es_glUniformMatrix4fv");
+*/
 
 // ============ GL_ARB_shader_objects ================
 

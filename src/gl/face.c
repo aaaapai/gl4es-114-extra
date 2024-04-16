@@ -3,6 +3,7 @@
 #include "loader.h"
 #include "gl4es.h"
 #include "glstate.h"
+#include "vgpu/pack/load.h"
 
 void gl4es_glCullFace(GLenum mode) {
     if(!glstate->list.pending)
@@ -18,7 +19,7 @@ void gl4es_glCullFace(GLenum mode) {
     FLUSH_BEGINEND;
     
     glstate->face.cull = mode;
-    LOAD_GLES(glCullFace);
+    LOAD_GLES2_(glCullFace);
     gles_glCullFace(mode);
 }
 
@@ -36,10 +37,10 @@ void gl4es_glFrontFace(GLenum mode) {
     FLUSH_BEGINEND;
     
     glstate->face.front = mode;
-    LOAD_GLES(glFrontFace);
+    LOAD_GLES2_(glFrontFace);
     gles_glFrontFace(mode);
 }
 
 
-void glCullFace(GLenum mode) AliasExport("gl4es_glCullFace");
-void glFrontFace(GLenum mode) AliasExport("gl4es_glFrontFace");
+//void glCullFace(GLenum mode) AliasExport("gl4es_glCullFace");
+//void glFrontFace(GLenum mode) AliasExport("gl4es_glFrontFace");

@@ -93,6 +93,7 @@ LOCAL_CFLAGS += -g -std=gnu99 -funwind-tables -fvisibility=hidden -include inclu
 LOCAL_CFLAGS += -DNOX11
 LOCAL_CFLAGS += -DNO_GBM
 LOCAL_CFLAGS += -DDEBUG
+LOCAL_CFLAGS += -DANDROID -pipe -integrated-as -fno-plt -Ofast -flto -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce
 #LOCAL_CFLAGS += -DNO_INIT_CONSTRUCTOR
 LOCAL_CFLAGS += -DDEFAULT_ES=2
 

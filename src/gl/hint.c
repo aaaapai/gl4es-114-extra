@@ -5,6 +5,7 @@
 #include "loader.h"
 #include "gl4es.h"
 #include "glstate.h"
+#include "vgpu/pack/load.h"
 
 #ifdef PANDORA
 void pandora_set_gamma();
@@ -14,7 +15,7 @@ void gl4es_glHint(GLenum pname, GLenum mode) {
     
     FLUSH_BEGINEND;
 
-    LOAD_GLES(glHint);
+    LOAD_GLES2_(glHint);
     noerrorShim();
     switch(pname) {
         // some Hint are not supported in GLES2, so just ignoring them
@@ -132,4 +133,4 @@ void gl4es_glHint(GLenum pname, GLenum mode) {
             gles_glHint(pname, mode);
     }
 }
-void glHint(GLenum pname, GLenum mode) AliasExport("gl4es_glHint");
+//void glHint(GLenum pname, GLenum mode) AliasExport("gl4es_glHint");

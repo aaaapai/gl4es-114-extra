@@ -7,6 +7,7 @@
 #include "logs.h"
 #include "gl4es.h"
 #include "gles.h"
+#include "vgpu/pack/load.h"
 
 #define p(a) \
     case a: return #a
@@ -415,7 +416,7 @@ const char* PrintEGLError(int onlyerror) {
 }
 
 void CheckGLError(int fwd) {
-    LOAD_GLES(glGetError);
+    LOAD_GLES2_(glGetError);
     GLenum err=gles_glGetError();
     if(err!=GL_NO_ERROR) {
         printf("LIBGL: glGetError(): %s\n", PrintEnum(err));

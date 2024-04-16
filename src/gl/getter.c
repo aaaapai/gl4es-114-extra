@@ -8,6 +8,7 @@
 #include "light.h"
 #include "matvec.h"
 #include "texgen.h"
+#include "vgpu/pack/load.h"
 
 //#define DEBUG
 #ifdef DEBUG
@@ -20,7 +21,7 @@ GLenum gl4es_glGetError() {
     DBG(printf("glGetError(), noerror=%d, shim_error=%d\n", globals4es.noerror, glstate->shim_error);)
     if(globals4es.noerror)
         return GL_NO_ERROR;
-	LOAD_GLES(glGetError);
+	LOAD_GLES2_(glGetError);
 	if (glstate->shim_error) {
         if(glstate->shim_error!=2)
             gles_glGetError();  // purge error log
@@ -31,7 +32,7 @@ GLenum gl4es_glGetError() {
     noerrorShim();  // next will be ok
 	return gles_glGetError();
 }
-GLenum glGetError() AliasExport("gl4es_glGetError");
+//GLenum glGetError() AliasExport("gl4es_glGetError");
 
 void gl4es_glGetPointerv(GLenum pname, GLvoid* *params) {
     DBG(printf("glGetPointerv(%s, %p)\n", PrintEnum(pname), params);)
@@ -70,7 +71,7 @@ void gl4es_glGetPointerv(GLenum pname, GLvoid* *params) {
             errorShim(GL_INVALID_ENUM);
     }
 }
-void glGetPointerv(GLenum pname, GLvoid* *params) AliasExport("gl4es_glGetPointerv");
+//void glGetPointerv(GLenum pname, GLvoid* *params) AliasExport("gl4es_glGetPointerv");
 
 void BuildExtensionsList() {
 	if(!glstate->extensions) {
@@ -251,14 +252,14 @@ const GLubyte *gl4es_glGetString(GLenum name) {
             return (GLubyte*)glstate->glsl->error_msg;
         default:
             if(name&0x10000) {
-                LOAD_GLES(glGetString);
+                LOAD_GLES2_(glGetString);
                 return gles_glGetString(name-0x10000);
             }
 			errorShim(GL_INVALID_ENUM);
             return (GLubyte*)"";
     }
 }
-const GLubyte *glGetString(GLenum name) AliasExport("gl4es_glGetString");
+//const GLubyte *glGetString(GLenum name) AliasExport("gl4es_glGetString");
 
 #define TOP(A) (glstate->A->stack+(glstate->A->top*16))
 
@@ -764,7 +765,7 @@ void gl4es_glGetIntegerv(GLenum pname, GLint *params) {
         return;
     }
     GLint dummy;
-    LOAD_GLES(glGetIntegerv);
+    LOAD_GLES2_(glGetIntegerv);
     noerrorShim();
     GLfloat fparam;
     if (gl4es_commonGet(pname, &fparam)) {
@@ -853,11 +854,11 @@ void gl4es_glGetIntegerv(GLenum pname, GLint *params) {
             gles_glGetIntegerv(pname, params);
     }
 }
-void glGetIntegerv(GLenum pname, GLint *params) AliasExport("gl4es_glGetIntegerv");
+//void glGetIntegerv(GLenum pname, GLint *params) AliasExport("gl4es_glGetIntegerv");
 
 void gl4es_glGetFloatv(GLenum pname, GLfloat *params) {
     DBG(printf("glGetFloatv(%s, %p)\n", PrintEnum(pname), params);)
-    LOAD_GLES(glGetFloatv);
+    LOAD_GLES2_(glGetFloatv);
     noerrorShim();
     if (gl4es_commonGet(pname, params)) {
         return;
@@ -920,12 +921,12 @@ void gl4es_glGetFloatv(GLenum pname, GLfloat *params) {
             gles_glGetFloatv(pname, params);
     }
 }
-void glGetFloatv(GLenum pname, GLfloat *params) AliasExport("gl4es_glGetFloatv");
+//void glGetFloatv(GLenum pname, GLfloat *params) AliasExport("gl4es_glGetFloatv");
 
 void gl4es_glGetDoublev(GLenum pname, GLdouble *params) {
     DBG(printf("glGetDoublev(%s, %p)\n", PrintEnum(pname), params);)
     GLfloat tmp[4*4];
-    LOAD_GLES(glGetFloatv);
+    LOAD_GLES2_(glGetFloatv);
     noerrorShim();
     if (gl4es_commonGet(pname, tmp)) {
         *params = *tmp;
@@ -1003,7 +1004,7 @@ void gl4es_glGetDoublev(GLenum pname, GLdouble *params) {
             params[0] = tmp[0];
     }
 }
-void glGetDoublev(GLenum pname, GLdouble *params) AliasExport("gl4es_glGetDoublev");
+//void glGetDoublev(GLenum pname, GLdouble *params) AliasExport("gl4es_glGetDoublev");
 
 void gl4es_glGetLightfv(GLenum light, GLenum pname, GLfloat * params) {
     DBG(printf("glGetLightfv(%s, %s, %p)\n", PrintEnum(light), PrintEnum(pname), params);)
@@ -1049,7 +1050,7 @@ void gl4es_glGetLightfv(GLenum light, GLenum pname, GLfloat * params) {
     }
     noerrorShim();
 }
-void glGetLightfv(GLenum light, GLenum pname, GLfloat * params) AliasExport("gl4es_glGetLightfv");
+//void glGetLightfv(GLenum light, GLenum pname, GLfloat * params) AliasExport("gl4es_glGetLightfv");
 
 void gl4es_glGetMaterialfv(GLenum face, GLenum pname, GLfloat * params) {
     DBG(printf("glGetMaterialfv(%sn %s, %p)\n", PrintEnum(face), PrintEnum(pname), params);)
@@ -1105,7 +1106,7 @@ void gl4es_glGetMaterialfv(GLenum face, GLenum pname, GLfloat * params) {
     }
     noerrorShim();
 }
-void glGetMaterialfv(GLenum face, GLenum pname, GLfloat * params) AliasExport("gl4es_glGetMaterialfv");
+//void glGetMaterialfv(GLenum face, GLenum pname, GLfloat * params) AliasExport("gl4es_glGetMaterialfv");
 
 void gl4es_glGetClipPlanef(GLenum plane, GLfloat * equation)
 {
@@ -1125,7 +1126,7 @@ void gl4es_glGetClipPlanef(GLenum plane, GLfloat * equation)
         memcpy(equation, glstate->planes[p], 4*sizeof(GLfloat)); // should return transformed coordinates
     }
 }
-void glGetClipPlanef(GLenum plane, GLfloat * equation) AliasExport("gl4es_glGetClipPlanef");
+//void glGetClipPlanef(GLenum plane, GLfloat * equation) AliasExport("gl4es_glGetClipPlanef");
 
 
 const GLubyte *gl4es_glGetStringi(GLenum name, GLuint index) {
@@ -1141,4 +1142,4 @@ const GLubyte *gl4es_glGetStringi(GLenum name, GLuint index) {
     }
     return glstate->extensions_list[index];
 }
-const GLubyte *glGetStringi(GLenum name, GLuint index) AliasExport("gl4es_glGetStringi");
+//const GLubyte *glGetStringi(GLenum name, GLuint index) AliasExport("gl4es_glGetStringi");
