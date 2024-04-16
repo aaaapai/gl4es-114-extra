@@ -92,7 +92,7 @@ LOCAL_SRC_FILES := \
 	src/gl/vgpu/pack/load.c \
 	src/gl/vgpu/pack/Initialization.c
 
-LOCAL_CFLAGS += -DANDROID -pipe -integrated-as -fno-plt -Ofast -flto -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -g -funwind-tables -fvisibility=hidden -include include/android_debug.h
+LOCAL_CFLAGS += -DANDROID -pipe -integrated-as -fno-plt -Ofast -flto -mllvm -polly -mllvm -polly-vectorizer=stripmine -mllvm -polly-invariant-load-hoisting -mllvm -polly-run-inliner -mllvm -polly-run-dce -g -std=gnu17 -funwind-tables -fvisibility=hidden -include include/android_debug.h
 #LOCAL_CFLAGS += -funsafe-math-optimizations -funroll-loops -frename-registers -fomit-frame-pointer -fgcse-las -fgcse-las -funswitch-loops -fweb
 LOCAL_CFLAGS += -DNOX11
 LOCAL_CFLAGS += -DNO_GBM
